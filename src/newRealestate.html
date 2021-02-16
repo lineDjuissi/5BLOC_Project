@@ -1,0 +1,131 @@
+<html>
+    
+<head>
+    <title>Create new real Estate</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- Custom styles for this template -->
+    <link href="../css/shop-homepage.css" rel="stylesheet">
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+        <a class="navbar-brand" href="#">Real Estates Sales</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> 
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="../index.html">Home
+                <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="src/myRealestate.html"> My Real Estates </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="src/newRealestate.html">New Realestate</a>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container"> 
+        
+        <div class="row">
+
+            <div class="col-lg-3">
+      
+              <h1 class="my-4">Real Estates Shop</h1>
+              <h3 class="my-4">Contract owners</h3>
+              <div class="list-group">
+                <a href="#" class="list-group-item">Linda DJUISSI  </a>
+                <a href="#" class="list-group-item">Bertille-Alida LEKEUFACK </a>
+                <a href="#" class="list-group-item">Woodiera WELE</a>
+                <a href="#" class="list-group-item">Amine BENABID</a>
+              </div>
+      
+            </div>
+            <!-- /.col-lg-3 -->
+      
+            <div class="col-lg-9">
+            
+                <div id="signupbox" style=" margin-top:50px" class="mainbox">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="margin-bottom: 50px;">
+                            <div class="panel-title" style="font-weight: bold; font-size: large;">Create your new Real Estate</div>
+                        </div>  
+                        <div class="panel-body" >
+                            <form method="post" action="#">
+                                <input type='hidden' name='csrfmiddlewaretoken' value='XFe2rTYl9WOpV8U6X5CfbIuOZOELJ97S' />
+                                        
+                                <form  class="form-horizontal" method="post" >
+                                    <input type='hidden' name='csrfmiddlewaretoken' value='XFe2rTYl9WOpV8U6X5CfbIuOZOELJ97S' />
+                                    
+                                    <div id="div_name" class="form-group required">
+                                        <label for="name" class="control-label col-md-4  requiredField"> Name<span class="asteriskField">*</span> </label>
+                                        <div class="controls col-md-8 ">
+                                            <input class="input-md  textinput textInput form-control" id="name" maxlength="30" name="name" placeholder="The new Real Estate name" style="margin-bottom: 10px" type="text" />
+                                        </div>
+                                    </div>
+                                
+                                    <div id="div_image" class="form-group required"> 
+                                        <label for="image" class="control-label col-md-4  requiredField"> Image <span class="asteriskField">*</span> </label> 
+                                        <div class="controls col-md-8 "> 
+                                            <input class="input-md textinput textInput form-control" id="image" name="image" placeholder="The new real Estate image link" style="margin-bottom: 10px" type="text" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="div_price" class="form-group required">
+                                        <label for="price" class="control-label col-md-4  requiredField"> Price <span class="asteriskField">*</span> </label>
+                                        <div class="controls col-md-8 ">
+                                            <input class="input-md textinput textInput form-control" id="price" name="price" placeholder="provide the new real estate price" style="margin-bottom: 10px" type="text" />
+                                        </div> 
+                                    </div> 
+                                    <div id="div_comission" class="form-group required">
+                                        <label for="comission" class="control-label col-md-4  requiredField"> Contract comission<span class="asteriskField">*</span> </label>
+                                        <div class="controls col-md-8 ">
+                                            <input class="input-md textinput textInput form-control" id="comission" name="comission" placeholder="Default is 10%" style="margin-bottom: 10px" type="text" />
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="form-group"> 
+                                        <div style="margin-bottom: 20px;" class="aab controls col-md-4 " id="txStatus">  </div>
+                                        <div class="controls col-md-8 ">
+                                            <input type="submit" name="Create" value="Create" class="btn btn-primary btn btn-info" id="submit-create" />
+                                            <input type="button" name="createRE" value="createRE" class="btn btn-primary btn btn-info" id="createRE" />
+                                        </div>
+                                    </div> 
+                                        
+                                </form>
+            
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col-lg-9 -->
+        </div> 
+    </div>
+    
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous" ></script>
+
+    <script>
+
+    </script>
+
+
+
+
+
+    
+</body>
+
+</html>
