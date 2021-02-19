@@ -19,7 +19,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="../index.html">Home
                 <span class="sr-only">(current)</span>
                 </a>
@@ -28,7 +28,7 @@
                 <a class="nav-link" href="src/myRealestate.html"> My Real Estates </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="src/newRealestate.html">New Realestate</a>
+                <a class="nav-link active" href="src/newRealestate.html">New Realestate</a>
             </li>
             </ul>
         </div>
@@ -60,11 +60,8 @@
                             <div class="panel-title" style="font-weight: bold; font-size: large;">Create your new Real Estate</div>
                         </div>  
                         <div class="panel-body" >
-                            <form method="post" action="#">
-                                <input type='hidden' name='csrfmiddlewaretoken' value='XFe2rTYl9WOpV8U6X5CfbIuOZOELJ97S' />
                                         
-                                <form  class="form-horizontal" method="post" >
-                                    <input type='hidden' name='csrfmiddlewaretoken' value='XFe2rTYl9WOpV8U6X5CfbIuOZOELJ97S' />
+                                <form  class="form-horizontal" action="#" id="create-form" >
                                     
                                     <div id="div_name" class="form-group required">
                                         <label for="name" class="control-label col-md-4  requiredField"> Name<span class="asteriskField">*</span> </label>
@@ -86,24 +83,22 @@
                                             <input class="input-md textinput textInput form-control" id="price" name="price" placeholder="provide the new real estate price" style="margin-bottom: 10px" type="text" />
                                         </div> 
                                     </div> 
-                                    <div id="div_comission" class="form-group required">
-                                        <label for="comission" class="control-label col-md-4  requiredField"> Contract comission<span class="asteriskField">*</span> </label>
+                                    <div id="div_comission"  class="form-group required">
                                         <div class="controls col-md-8 ">
-                                            <input class="input-md textinput textInput form-control" id="comission" name="comission" placeholder="Default is 10%" style="margin-bottom: 10px" type="text" />
+                                            <input class="input-md textinput textInput form-control" id="comission" name="comission" placeholder="Default is 10%" style="margin-bottom: 10px" type="hidden" />
                                         </div> 
                                     </div>
                                     
                                     <div class="form-group"> 
                                         <div style="margin-bottom: 20px;" class="aab controls col-md-4 " id="txStatus">  </div>
                                         <div class="controls col-md-8 ">
-                                            <input type="submit" name="Create" value="Create" class="btn btn-primary btn btn-info" id="submit-create" />
-                                            <input type="button" name="createRE" value="createRE" class="btn btn-primary btn btn-info" id="createRE" />
+                                            <input type="button" name="createRE" value="Create" class="btn btn-primary btn btn-info" id="createRE" />
                                         </div>
                                     </div> 
                                         
                                 </form>
             
-                            </form>
+                            
                         </div>
                     </div>
                 </div>

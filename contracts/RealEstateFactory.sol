@@ -18,11 +18,13 @@ contract RealEstateFactory is Ownable, ERC721 {
 
 
   struct RealEstate {
+    uint idRealestate;
     string name;
     address salerAddress;
     uint price;
     string images;
     uint comission;
+    bool status;
   }
 
   RealEstate[] public realestates;
@@ -31,13 +33,16 @@ contract RealEstateFactory is Ownable, ERC721 {
   mapping (address => uint) ownerRealestateCount;
   mapping (uint => address) realestateApprovals;
   
+  
   //fonctions for realestates management 
   
 
   function createRealEstate(string _name, uint _price, string _realestateImages) public {
     address realestateOwner = msg.sender;
     uint comission = 10;
-    uint id = realestates.push(RealEstate(_name, realestateOwner, _price, _realestateImages, comission)) - 1;
+    uint idRealestate = realestates.length;
+    bool status= true ;
+    uint id = realestates.push(RealEstate(idRealestate, _name, realestateOwner, _price, _realestateImages, comission, status)) - 1;
     realestateToOwner[id] = msg.sender;
     ownerRealestateCount[msg.sender]++;
     NewRealEstate(id, _name, realestateOwner, _price, _realestateImages, comission);
@@ -53,6 +58,46 @@ contract RealEstateFactory is Ownable, ERC721 {
         counter++;
     }
     return result;
+  }
+  
+  
+  function getRealestateId() public view returns(uint[]) {
+    uint[] memory result1 = new uint[](realestates.length);
+    
+    for (uint i = 0; i < realestates.length; i++) {
+        result1[i] = realestates[i].idRealestate ;
+        
+    }
+    return result1;
+  }
+  
+  
+  
+  function getRealestatesByOwner(address _owner) external view returns(uint[]) {
+    uint[] memory result = new uint[](ownerRealestateCount[_owner]);
+    uint counter = 0;
+    for (uint i = 0; i < realestates.length; i++) {
+      if (realestateToOwner[i] == _owner) {
+        result[counter] = i;
+        counter++;
+      }
+    }
+    return result;
+  }
+  
+  
+  
+  function getStatus(uint _realestateId) external view returns(bool) {
+      return realestates[_realestateId].status;
+  }
+  
+  
+  function updateStatus(uint _realestateId) external {
+      if (realestates[_realestateId].status == true){
+           realestates[_realestateId].status = false;
+      } else {
+           realestates[_realestateId].status = true;
+      }
   }
   
   // Fonctions for the saling of real estate
@@ -73,15 +118,16 @@ contract RealEstateFactory is Ownable, ERC721 {
   }
   
   
-  function _transfer(address _from, address _to, uint256 _realestateId) private {
+  function _transfert(address _from, address _to, uint256 _realestateId) private {
     ownerRealestateCount[_to]++;
     ownerRealestateCount[_from]--;
     realestateToOwner[_realestateId] = _to;
-    Transfer(_from, _to, _realestateId);
+    realestates[_realestateId].salerAddress = _to;
+    Transfert(_from, _to, _realestateId);
   }
 
-  function transfer(address _to, uint256 _realestateId) public onlyOwnerOf(_realestateId) {
-      _transfer(msg.sender, _to, _realestateId);
+  function transfert(address _to, uint256 _realestateId) public onlyOwnerOf(_realestateId) {
+      _transfert(msg.sender, _to, _realestateId);
   }
 
   function approve(address _to, uint256 _realestateId) internal {
@@ -92,7 +138,7 @@ contract RealEstateFactory is Ownable, ERC721 {
 
   function takeOwnership(uint256 _realestateId) public {
     require(realestateApprovals[_realestateId] == msg.sender);
-    _transfer(ownerOf(_realestateId), msg.sender, _realestateId);
+    _transfert(ownerOf(_realestateId), msg.sender, _realestateId);
 
   }
   
@@ -103,31 +149,35 @@ contract RealEstateFactory is Ownable, ERC721 {
       return this.balance;
   }
   
-  function getvalue() public view returns (uint256 _comission) {
-      uint256 comission = (this.balance * 10)/100 ;
-      return comission;
+  function getPrice(uint256 _realestateId) public view returns (uint256) {
+      return realestates[_realestateId].price;
   }
   
-  function getseller() public view returns (address _seller) {
+  function getSeller() public view returns (address) {
       return curentSeller;
   }
   
   
-  function BuyRealEstate(uint256 _realestateId) external payable {
+  function BuyRealEstate(uint256 _realestateId) public payable {
     uint price = realestates[_realestateId].price;
+    price = price * 1 ether;
     require(msg.value == price); 
-    curentSeller = realestateToOwner[_realestateId];
-    curentComission = realestates[_realestateId].comission;
+    //curentSeller = realestateToOwner[_realestateId];
+    //curentComission = realestates[_realestateId].comission;
     approve(msg.sender, _realestateId);
     takeOwnership(_realestateId);
    
   }
   
   
-  function getPaid() external {
+  function TestTransf1(address _to) public payable {
+      _to.transfer(this.balance);
+  }
+  
+  function getPaid(address _seller, uint _comission) external {
     
-    uint comission = (this.balance * curentComission)/100 ;
-    curentSeller.transfer(this.balance - comission);
+    uint comission = (this.balance * _comission)/100 ;
+    _seller.transfer(this.balance - comission);
     owner.transfer(this.balance);
   }
   
@@ -137,9 +187,6 @@ contract RealEstateFactory is Ownable, ERC721 {
     realestates[_realestateId].images = _image;
     realestates[_realestateId].comission = _comission;
   }
-  
-  
-  
   
   
 }
