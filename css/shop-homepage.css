@@ -6,3 +6,9 @@
 body {
   padding-top: 56px;
 }
+
+.d-block {
+  width: 900px;
+  height: 350px;
+}
+

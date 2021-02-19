@@ -19,15 +19,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
+          <li class="nav-item ">
               <a class="nav-link" href="../index.html">Home
               <span class="sr-only">(current)</span>
               </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
               <a class="nav-link" href="#"> My Real Estates </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item ">
               <a class="nav-link" href="newRealestate.html">New Realestate</a>
           </li>
           </ul>
@@ -67,19 +67,9 @@
             </thead>
             <tbody id="re-table">  
               
-                
             </tbody>     
           </table>
           <div class="clearfix"></div>
-          <ul class="pagination pull-right">
-              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-          </ul>
 
         </div>
       </div>
@@ -88,34 +78,27 @@
 
 
 <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-      <div class="modal-dialog">
+  <div class="modal-dialog">
     <div class="modal-content">
-          <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+      <div class="modal-header">
+        <h4 class="modal-title custom_align" id="Heading">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+          Edit our realestate
+        </h4>
       </div>
-          <div class="modal-body">
-          <div class="form-group">
-        <input class="form-control " type="text" placeholder="Mohsin">
-        </div>
-        <div class="form-group">
-        
-        <input class="form-control " type="text" placeholder="Irshad">
-        </div>
-        <div class="form-group">
-        <textarea rows="2" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
-    
-        
-        </div>
+      <div class="modal-body" id="edit-modal">
+        <form id="edit-form" >
+
+        </form>
       </div>
-          <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+      <div class="modal-footer ">
+        <button id="btn-update" type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
       </div>
-        </div>
+    </div>
     <!-- /.modal-content --> 
   </div>
       <!-- /.modal-dialog --> 
-    </div>
+</div>
     
     
     
