@@ -6,7 +6,7 @@
 
     function startApp() {
 
-        var address = "0xd7E00349dEA70A754627d9d75Bd35F330fA9d164";
+        var address = "0xE43aE772c8d97a4Da0444b30732A9527E44498C6";
         var abi = [
             {
                 "constant": false,
@@ -69,6 +69,23 @@
                 "payable": false,
                 "stateMutability": "nonpayable",
                 "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "previousOwner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "name": "OwnershipTransferred",
+                "type": "event"
             },
             {
                 "constant": false,
@@ -161,23 +178,6 @@
                 "type": "event"
             },
             {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "name": "previousOwner",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "name": "newOwner",
-                        "type": "address"
-                    }
-                ],
-                "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
                 "constant": false,
                 "inputs": [
                     {
@@ -238,6 +238,15 @@
                     }
                 ],
                 "name": "updateStatus",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [],
+                "name": "withdrawCom",
                 "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
@@ -492,6 +501,8 @@
 
         getRealestates().then(displayRealestates);
         getRealestates().then(displayAdminRealestates);
+        checkOwner();
+        checkOwner2();
 
         //Charger les realestates du compte courant
         web3js.eth.getAccounts().then(function(accounts) 
@@ -584,6 +595,8 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
+                <td>${realestate.location}</td>
+                <td>${realestate.pieces}</td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-name="${realestate.name}" data-location="${realestate.location}" data-pieces="${realestate.pieces}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><p data-placement="top" data-toggle="tooltip" ><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Mask </button></p></td>
             </tr>`);
@@ -595,6 +608,8 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
+                <td>${realestate.location}</td>
+                <td>${realestate.pieces}</td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-name="${realestate.name}" data-location="${realestate.location}" data-pieces="${realestate.pieces}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Show </button></td>
             </tr>`);
@@ -613,6 +628,49 @@
 
 // function for the display of real estate for admin view
 
+    function checkOwner() {
+
+        web3js.eth.getAccounts().then(function(accounts) {
+            $.when(ownerf()).then(function(owner){
+                if(accounts[0] == owner){
+                    
+                    document.getElementById("contract-ad").style = "display: block;";
+                }
+
+            }).then(function(params) {
+                console.log("after if");
+                
+            });
+        })
+
+
+        /*console.log("after if 1");
+        console.log(own);
+        console.log(user);*/
+
+    }
+
+
+    function checkOwner2() {
+
+
+        web3js.eth.getAccounts().then(function(accounts) {
+            $.when(ownerf()).then(function(owner){
+                if(accounts[0] == owner){
+                    
+                    document.getElementById("contract-ad2").style ="display: block;";
+                    document.getElementById("contract-ad3").style = "display: block;";
+                }
+
+            }).then(function(params) {
+                console.log("after if2");
+                
+            });
+        })
+
+    }
+
+
     function displayAdminRealestates(ids) {
         $("#admin-table").empty();
         for (id of ids) {
@@ -629,6 +687,8 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
+                <td>${realestate.location}</td>
+                <td>${realestate.pieces}</td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit-com" data-id="${realestate.idRealestate}"  data-comission="${realestate.comission}"  class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editcom" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><p data-placement="top" data-toggle="tooltip" ><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Mask </button></p></td>
             </tr>`);
@@ -640,6 +700,8 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
+                <td>${realestate.location}</td>
+                <td>${realestate.pieces}</td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit-com" data-id="${realestate.idRealestate}"  data-comission="${realestate.comission}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editcom" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Show </button></td>
             </tr>`);
@@ -674,7 +736,10 @@
         return realestateContract.methods.getRealestatesByOwner(owner).call()
     }
 
-
+    function ownerf() {
+        console.log("je suis dans owner");
+        return realestateContract.methods.owner().call()
+    }
 
 //function for the real estate creation
 
@@ -741,6 +806,7 @@
         })
     }
 
+
     function getPaid(seller, comission) {
         web3js.eth.getAccounts().then(function(accounts) 
         {
@@ -761,6 +827,28 @@
     function getPrice(realestateId) {
         return realestateContract.methods.getPrice(realestateId).call()
     }
+
+
+//functions for withdraw comissions
+$('#collect-div').on('click', '#collect-com', function(){
+    withdrawCom();
+})
+
+function withdrawCom() {
+    web3js.eth.getAccounts().then(function(accounts) 
+        {
+            return realestateContract.methods.withdrawCom().send({ from: accounts[0]});
+        }).then(function(tx) 
+        {
+            console.log("withdraw execute");
+            document.location.reload(true);
+
+        }).catch(function(tx)
+        {
+            console.log(tx);
+            console.log("withdraw fail");
+        })
+}
 
 
 // functions for the realestate edition by their owner
@@ -808,16 +896,19 @@
         var pieces = document.getElementById("pieces").value;
         
         updateRealestate(realestateId, price, image, name, location, pieces)
+        console.log("inside click update");
         
     })
 
 
-    function updateRealestate(id, price, image, comission) {
+    function updateRealestate(id, price, image, name, location, pieces) {
         web3js.eth.getAccounts().then(function(accounts) 
         {
-            return realestateContract.methods.updateRealestate(id, price, image, comission).send({ from: accounts[0]});
+            console.log("inside update function");
+            return realestateContract.methods.updateRealestate(id, price, image, name, location, pieces).send({ from: accounts[0]});
         }).then(function(tx) 
         {
+            console.log("update ok");
             document.location.reload(true);
         }).catch(function(tx)
         {

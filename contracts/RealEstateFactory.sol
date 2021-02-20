@@ -11,11 +11,6 @@ contract RealEstateFactory is Ownable, ERC721 {
 
   using SafeMath for uint256;
   
-  address curentSeller;
-  uint curentComission;
-
-  event NewRealEstate(uint realEstateId, string name, address salerAddress, uint price, string images, uint comission);
-
 
   struct RealEstate {
     uint idRealestate;
@@ -25,6 +20,8 @@ contract RealEstateFactory is Ownable, ERC721 {
     string images;
     uint comission;
     bool status;
+    string location;
+    uint pieces;
   }
 
   RealEstate[] public realestates;
@@ -37,19 +34,19 @@ contract RealEstateFactory is Ownable, ERC721 {
   //fonctions for realestates management 
   
 
-  function createRealEstate(string _name, uint _price, string _realestateImages) public {
+  function createRealEstate(string _name, uint _price, string _realestateImages, string _location, uint _pieces) public {
     address realestateOwner = msg.sender;
     uint comission = 10;
     uint idRealestate = realestates.length;
     bool status= true ;
-    uint id = realestates.push(RealEstate(idRealestate, _name, realestateOwner, _price, _realestateImages, comission, status)) - 1;
+    uint id = realestates.push(RealEstate(idRealestate, _name, realestateOwner, _price, _realestateImages, comission, status, _location, _pieces)) - 1;
     realestateToOwner[id] = msg.sender;
     ownerRealestateCount[msg.sender]++;
-    NewRealEstate(id, _name, realestateOwner, _price, _realestateImages, comission);
   }
   
   
-  // List all the existing realestates
+  // functions to access realestates and their attributes
+  
   function getAllRealestates() external view returns(uint[]) {
     uint[] memory result = new uint[](realestates.length);
     uint counter = 0;
@@ -72,7 +69,6 @@ contract RealEstateFactory is Ownable, ERC721 {
   }
   
   
-  
   function getRealestatesByOwner(address _owner) external view returns(uint[]) {
     uint[] memory result = new uint[](ownerRealestateCount[_owner]);
     uint counter = 0;
@@ -86,12 +82,11 @@ contract RealEstateFactory is Ownable, ERC721 {
   }
   
   
-  
   function getStatus(uint _realestateId) external view returns(bool) {
       return realestates[_realestateId].status;
   }
   
-  
+
   function updateStatus(uint _realestateId) external {
       if (realestates[_realestateId].status == true){
            realestates[_realestateId].status = false;
@@ -100,7 +95,8 @@ contract RealEstateFactory is Ownable, ERC721 {
       }
   }
   
-  // Fonctions for the saling of real estate
+  
+  // Functions from ERC721 for token management
   
   modifier onlyOwnerOf(uint _realestateId) {
     require(msg.sender == realestateToOwner[_realestateId]);
@@ -113,7 +109,6 @@ contract RealEstateFactory is Ownable, ERC721 {
   }
 
   function ownerOf(uint256 _realestateId) public view returns (address _owner) {
-    // 2. Renvoyez le propriétaire de `_realestateId` ici
     return realestateToOwner[_realestateId];
   }
   
@@ -142,8 +137,32 @@ contract RealEstateFactory is Ownable, ERC721 {
 
   }
   
+
   
-  //function for the selling 
+  //functions for the realestates selling 
+  
+
+  function BuyRealEstate(uint256 _realestateId) public payable {
+    uint price = realestates[_realestateId].price;
+    price = price * 1 ether;
+    require(msg.value == price); 
+    approve(msg.sender, _realestateId);
+    takeOwnership(_realestateId);
+   
+  }
+  
+  function getPaid(address _seller, uint _comission) external {
+    
+    uint comission = (this.balance * _comission)/100 ;
+    _seller.transfer(this.balance - comission);
+    //owner.transfer(this.balance);
+  }
+  
+  
+  function withdrawCom() external {
+      owner.transfer(this.balance);
+  }
+  
   
   function getBalance() public view returns (uint256 _balance) {
       return this.balance;
@@ -153,38 +172,24 @@ contract RealEstateFactory is Ownable, ERC721 {
       return realestates[_realestateId].price;
   }
   
-  function getSeller() public view returns (address) {
-      return curentSeller;
+  function getSeller(uint256 _realestateId) public view returns (address) {
+      return realestates[_realestateId].salerAddress ;
   }
   
   
-  function BuyRealEstate(uint256 _realestateId) public payable {
-    uint price = realestates[_realestateId].price;
-    price = price * 1 ether;
-    require(msg.value == price); 
-    //curentSeller = realestateToOwner[_realestateId];
-    //curentComission = realestates[_realestateId].comission;
-    approve(msg.sender, _realestateId);
-    takeOwnership(_realestateId);
-   
-  }
   
+  //function for attributs updating
   
-  function TestTransf1(address _to) public payable {
-      _to.transfer(this.balance);
-  }
-  
-  function getPaid(address _seller, uint _comission) external {
-    
-    uint comission = (this.balance * _comission)/100 ;
-    _seller.transfer(this.balance - comission);
-    owner.transfer(this.balance);
-  }
-  
-  
-  function updateRealestate(uint _realestateId, uint _price, string _image , uint _comission) external onlyOwnerOf(_realestateId) {
+  function updateRealestate(uint _realestateId, uint _price, string _image , string _name, string _location, uint _pieces) external onlyOwnerOf(_realestateId) {
     realestates[_realestateId].price = _price;
     realestates[_realestateId].images = _image;
+    realestates[_realestateId].name = _name;
+    realestates[_realestateId].location = _location;
+    realestates[_realestateId].pieces = _pieces;
+  }
+  
+  
+  function updateComission(uint _realestateId, uint _comission) external onlyOwner() {
     realestates[_realestateId].comission = _comission;
   }
   
