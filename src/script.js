@@ -6,7 +6,7 @@
 
     function startApp() {
 
-        var address = "0x2aEe51bE0435dbc0AF39D73629C12F77E3917AB5";
+        var address = "0xd7E00349dEA70A754627d9d75Bd35F330fA9d164";
         var abi = [
             {
                 "constant": false,
@@ -36,6 +36,14 @@
                     {
                         "name": "_realestateImages",
                         "type": "string"
+                    },
+                    {
+                        "name": "_location",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_pieces",
+                        "type": "uint256"
                     }
                 ],
                 "name": "createRealEstate",
@@ -63,60 +71,6 @@
                 "type": "function"
             },
             {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "name": "realEstateId",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "name",
-                        "type": "string"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "salerAddress",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "price",
-                        "type": "uint256"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "images",
-                        "type": "string"
-                    },
-                    {
-                        "indexed": false,
-                        "name": "comission",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "NewRealEstate",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "name": "previousOwner",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "name": "newOwner",
-                        "type": "address"
-                    }
-                ],
-                "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
                 "constant": false,
                 "inputs": [
                     {
@@ -128,20 +82,6 @@
                 "outputs": [],
                 "payable": false,
                 "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_to",
-                        "type": "address"
-                    }
-                ],
-                "name": "TestTransf1",
-                "outputs": [],
-                "payable": true,
-                "stateMutability": "payable",
                 "type": "function"
             },
             {
@@ -221,6 +161,41 @@
                 "type": "event"
             },
             {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "previousOwner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "name": "OwnershipTransferred",
+                "type": "event"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_realestateId",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_comission",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "updateComission",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
                 "constant": false,
                 "inputs": [
                     {
@@ -236,7 +211,15 @@
                         "type": "string"
                     },
                     {
-                        "name": "_comission",
+                        "name": "_name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_location",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_pieces",
                         "type": "uint256"
                     }
                 ],
@@ -361,7 +344,12 @@
             },
             {
                 "constant": true,
-                "inputs": [],
+                "inputs": [
+                    {
+                        "name": "_realestateId",
+                        "type": "uint256"
+                    }
+                ],
                 "name": "getSeller",
                 "outputs": [
                     {
@@ -462,6 +450,14 @@
                     {
                         "name": "status",
                         "type": "bool"
+                    },
+                    {
+                        "name": "location",
+                        "type": "string"
+                    },
+                    {
+                        "name": "pieces",
+                        "type": "uint256"
                     }
                 ],
                 "payable": false,
@@ -495,6 +491,7 @@
         userAccount = web3.eth.accounts[0];
 
         getRealestates().then(displayRealestates);
+        getRealestates().then(displayAdminRealestates);
 
         //Charger les realestates du compte courant
         web3js.eth.getAccounts().then(function(accounts) 
@@ -518,6 +515,10 @@
     }
 
 
+
+//function for the display of all real estates 
+
+
     function displayRealestates(ids) {
         $("#realestate").empty();
         var seller;
@@ -533,14 +534,21 @@
             if (realestate.status == true) { 
                 $("#realestate").append(`<div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100">
-                <a href="#"><img class="card-img-top" src="${realestate.images}" alt=""></a>
+                <div class="card-head">
+                    <a href="#"><img class="card-img-top" src="${realestate.images}" alt=""></a>
+                </div>
                 <div class="card-body">
                     <h4 class="card-title">
                     <a href="#">${realestate.name}</a>
                     </h4>
                     <h5>${realestate.price} ETH </h5>
                     <p class="card-text" id="realestate-details">
-                        Seller : ${seller} IMAGE ${realestate.images}  id : ${realestate.idRealestate}!
+                        <div>
+                            Nombre de pieces : ${realestate.pieces} pieces 
+                        </div>
+                        <div style = "margin-bottom: 15px;">
+                            Ville : ${realestate.location} 
+                        </div>
                         <div>
                             <button class="btn btn-info paid" data-id="${realestate.idRealestate}" data-seller="${realestate.salerAddress}" data-comission="${realestate.comission}"> BUY </button>
                         </div>
@@ -556,6 +564,9 @@
         });
         }
     }
+
+
+//function for the display of real estates by owner
 
     function displayOwnerRealestates(ids) {
         $("#re-table").empty();
@@ -573,7 +584,7 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-comission="${realestate.comission}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-name="${realestate.name}" data-location="${realestate.location}" data-pieces="${realestate.pieces}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><p data-placement="top" data-toggle="tooltip" ><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Mask </button></p></td>
             </tr>`);
 
@@ -584,7 +595,7 @@
                 <td>${realestate.price}</td>
                 <td>${realestate.images}</td>
                 <td>${realestate.comission}</td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-comission="${realestate.comission}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit" data-id="${realestate.idRealestate}" data-price="${realestate.price}" data-image="${realestate.images}" data-name="${realestate.name}" data-location="${realestate.location}" data-pieces="${realestate.pieces}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
                 <td><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Show </button></td>
             </tr>`);
 
@@ -599,6 +610,53 @@
 
     }
 
+
+// function for the display of real estate for admin view
+
+    function displayAdminRealestates(ids) {
+        $("#admin-table").empty();
+        for (id of ids) {
+            getRealestatesDetails(id)
+            .then(function(realestate) {
+                // Using ES6's "template literals" to inject variables into the HTML.
+                // Append each one to our #zombies div
+               //console.log(realestate.status);
+            
+            if (realestate.status == true){
+                $("#admin-table").append(`<tr>
+                <td><input type="checkbox" class="checkthis" /></td>
+                <td>${realestate.name}</td>
+                <td>${realestate.price}</td>
+                <td>${realestate.images}</td>
+                <td>${realestate.comission}</td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit-com" data-id="${realestate.idRealestate}"  data-comission="${realestate.comission}"  class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editcom" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" ><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Mask </button></p></td>
+            </tr>`);
+
+            } else if (realestate.status == false) {
+                $("#admin-table").append(`<tr>
+                <td><input type="checkbox" class="checkthis" /></td>
+                <td>${realestate.name}</td>
+                <td>${realestate.price}</td>
+                <td>${realestate.images}</td>
+                <td>${realestate.comission}</td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="btn-edit-com" data-id="${realestate.idRealestate}"  data-comission="${realestate.comission}" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editcom" ><span class="glyphicon glyphicon-pencil">Edit</span></button></p></td>
+                <td><button id="btn-mask" data-id="${realestate.idRealestate}" data-status="${realestate.status}" class="btn btn-danger btn-xs"> Show </button></td>
+            </tr>`);
+
+            }
+
+            console.log("after table");
+            console.log(realestate.idRealestate);
+
+            })
+
+        }
+
+    }
+
+
+// functions of access used for the differents real estates displays
 
     function getRealestatesDetails(id) {
         return realestateContract.methods.realestates(id).call()
@@ -617,23 +675,28 @@
     }
 
 
+
+//function for the real estate creation
+
     $('#createRE').click(function () 
     {       
         var name = document.getElementById("name").value;
         var price = document.getElementById("price").value;
         var img = document.getElementById("image").value;
-        createRealEstate(name, price, img)
+        var pieces = document.getElementById("pieces").value;
+        var location = document.getElementById("location").value;
+        createRealEstate(name, price, img, location, pieces);
     })
 
 
-    function createRealEstate(name, price, img) {
+    function createRealEstate(name, price, img, location, pieces) {
 
         const accounts = ethereum.request({ method: 'eth_accounts' });
         console.log(accounts);
 
         web3js.eth.getAccounts().then(function(accounts) 
         {
-            return realestateContract.methods.createRealEstate(name, price, img).send({ from: accounts[0]});
+            return realestateContract.methods.createRealEstate(name, price, img, location, pieces).send({ from: accounts[0]});
         }).then(function(tx) 
         {
             document.getElementById("create-form").reset();
@@ -644,6 +707,9 @@
 
     }
 
+
+
+// function for the real estates payement 
 
     $('#realestate').on('click', '.paid', function(){
 
@@ -696,46 +762,52 @@
         return realestateContract.methods.getPrice(realestateId).call()
     }
 
+
+// functions for the realestate edition by their owner
+
+    // function load when the edit button is clicked and that charged the edit form
     $('#re-table').on('click', '#btn-edit', function(){
 
         var id = $(this).data('id');
         var price = $(this).data('price');
         var image = $(this).data('image');
-        var comission = $(this).data('comission');
+        var name = $(this).data('name');
+        var location = $(this).data('location');
+        var pieces = $(this).data('pieces');
         
         $("#edit-form").empty();
 
-        $("#edit-form").append(` <div class="form-group">
-        <input class="form-control " type="text" id="price" placeholder="Price" value="${price}">
-      </div>
-      <div class="form-group">
-        <input class="form-control " type="text" id="image" placeholder="Image Link" value="${image}">
-      </div>
-      <div class="form-group">
-        <input class="form-control " type="text" id="comission" placeholder="Comission" value="${comission}" >
+        $("#edit-form").append(`<div class="form-group">
+        <input class="form-control " type="text" id="name" placeholder="Name" value="${name}" >
       </div> 
-      <input class="form-control " type="hidden" id="idR" placeholder="Image Link" value="${id}">
+        <div class="form-group">
+            <input class="form-control " type="text" id="price" placeholder="Price" value="${price}">
+        </div>
+        <div class="form-group">
+            <input class="form-control " type="text" id="image" placeholder="Image Link" value="${image}">
+        </div>
+        <div class="form-group">
+            <input class="form-control " type="text" id="location" placeholder="Location" value="${location}">
+        </div>
+        <div class="form-group">
+            <input class="form-control " type="text" id="pieces" placeholder="Nombre de pieces" value="${pieces}">
+        </div>
+        <input class="form-control " type="hidden" id="idR" placeholder="Id" value="${id}">
       `);
 
     })
 
-
-
-
-
-
+    //function load when update realestate button is clicked
     $('#edit').on('click', '#btn-update', function(){
 
         var realestateId = document.getElementById("idR").value;
         var price = document.getElementById("price").value;
         var image = document.getElementById("image").value;
-        var comission = document.getElementById("comission").value;
+        var name = document.getElementById("name").value;
+        var location = document.getElementById("location").value;
+        var pieces = document.getElementById("pieces").value;
         
-        console.log(realestateId);
-        console.log(price);
-        console.log(image);
-        console.log(comission);
-        updateRealestate(realestateId, price, image, comission)
+        updateRealestate(realestateId, price, image, name, location, pieces)
         
     })
 
@@ -755,8 +827,70 @@
    }
 
 
+//functions for the edition of comission by the contract owner
+
+    $('#admin-table').on('click', '#btn-edit-com', function(){
+
+        var id = $(this).data('id');
+        var comission = $(this).data('comission');
+        
+        $("#editcom-form").empty();
+
+        $("#editcom-form").append(` 
+        <div class="form-group">
+            <input class="form-control " type="text" id="comission-edit" placeholder="Comission" value="${comission}" >
+        </div> 
+        <input class="form-control " type="hidden" id="idR-com" placeholder="Image Link" value="${id}">
+        `);
+
+    })
+
+
+    $('#editcom').on('click', '#btn-update-com', function(){
+
+        var realestateId = document.getElementById("idR-com").value;
+        var comission = document.getElementById("comission-edit").value;
+        
+        console.log(realestateId);
+        console.log(comission);
+
+        updateComRealestate(realestateId, comission);
+        
+    })
+
+
+   function updateComRealestate(id, comission) {
+    web3js.eth.getAccounts().then(function(accounts) 
+    {
+        return realestateContract.methods.updateComission(id, comission).send({ from: accounts[0]});
+    }).then(function(tx) 
+    {
+        document.location.reload(true);
+    }).catch(function(tx)
+    {
+        console.log(tx);
+    })
+
+}
+
+
+//functions to update the status / mask real estates
+
 
    $('#re-table').on('click', '#btn-mask', function(){
+
+        var realestateId = $(this).data('id');
+        var status = $(this).data('status');
+
+        console.log("inside btn mask");
+        console.log(realestateId);
+        console.log(status);
+        
+        updateRealestateStatus(realestateId);
+    })
+
+//for the admin view
+    $('#admin-table').on('click', '#btn-mask', function(){
 
         var realestateId = $(this).data('id');
         var status = $(this).data('status');
@@ -783,6 +917,9 @@
 
     }
 
+
+// Load of the document setting
+
     $(document).ready(function() 
     {
         if (window.ethereum) {
@@ -797,6 +934,5 @@
           }
 
         startApp();
-        //console.log('test1');
 
     })
